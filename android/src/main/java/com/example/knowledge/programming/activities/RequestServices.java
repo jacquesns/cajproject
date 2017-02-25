@@ -12,7 +12,7 @@ public class RequestServices extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.request_services);
+        setContentView(R.layout.activity_request_services);
     }
 
 }

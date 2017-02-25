@@ -8,16 +8,17 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.example.knowledge.programming.activities.MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.knowledge.programming.activities.DisplayMessageActivity"/>
-        <activity android:name="com.example.knowledge.programming.activities.ServicesActivity"/>
-        <activity android:name="com.example.knowledge.programming.activities.RequestServices"/>
-        <activity android:name="com.example.knowledge.programming.activities.OfferServices"/>
+        <activity android:name=".DisplayMessageActivity" />
+        <activity android:name=".ServicesActivity" />
+        <activity android:name=".RequestServices" />
+        <activity android:name=".OfferServices"></activity>
     </application>
+
 </manifest>
