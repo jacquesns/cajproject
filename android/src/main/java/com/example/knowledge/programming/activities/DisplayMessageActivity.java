@@ -1,4 +1,4 @@
-package com.example.knowledge.programming.mysecondapplication;
+package com.example.knowledge.programming.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
