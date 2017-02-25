@@ -1,4 +1,4 @@
-package com.example.knowledge.programming.mysecondapplication;
+package com.example.knowledge.programming.activities;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

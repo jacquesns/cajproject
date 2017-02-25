@@ -1,4 +1,4 @@
-package com.example.knowledge.programming.mysecondapplication;
+package com.example.knowledge.programming.activities;
 
 import org.junit.Test;
 
