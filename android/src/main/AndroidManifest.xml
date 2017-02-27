@@ -2,7 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.knowledge.programming.activities">
 
+    <!-- -->
+    <uses-sdk
+        android:minSdkVersion="11"
+        android:targetSdkVersion="16" />
+
+
     <application
+        android:name="com.example.knowledge.programming.activities.ApplicationContext"
+
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -17,8 +25,9 @@
         </activity>
         <activity android:name=".DisplayMessageActivity" />
         <activity android:name=".ServicesActivity" />
-        <activity android:name=".RequestServices" />
-        <activity android:name=".OfferServices"></activity>
+        <activity android:name=".RequestServicesActivity" />
+        <activity android:name=".OfferServicesActivity"></activity>
     </application>
+
 
 </manifest>

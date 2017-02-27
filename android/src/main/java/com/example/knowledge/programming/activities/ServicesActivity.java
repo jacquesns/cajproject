@@ -21,7 +21,7 @@ public class ServicesActivity extends AppCompatActivity {
         buttonRequestServices.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                startActivity(new Intent(ServicesActivity.this, RequestServices.class));
+                startActivity(new Intent(ServicesActivity.this, RequestServicesActivity.class));
             }
         });
 
@@ -29,7 +29,7 @@ public class ServicesActivity extends AppCompatActivity {
         buttonOfferServices.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                startActivity(new Intent(ServicesActivity.this, OfferServices.class));
+                startActivity(new Intent(ServicesActivity.this, OfferServicesActivity.class));
             }
         });
     }
