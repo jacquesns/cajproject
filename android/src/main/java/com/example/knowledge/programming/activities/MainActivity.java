@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,6 +21,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
               startActivity(new Intent(MainActivity.this, ServicesActivity.class));
+            }
+        });
+
+        TextView textViewNewUser = (TextView) findViewById(R.id.textViewNewUser);
+        textViewNewUser.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v){
+                startActivity(new Intent(MainActivity.this, UserManagerActivity.class));
             }
         });
     }

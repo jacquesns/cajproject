@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.knowledge.programming.activities">
-
-    <!-- -->
+    package="com.example.knowledge.programming.activities"> <!--  -->
     <uses-sdk
         android:minSdkVersion="11"
         android:targetSdkVersion="16" />
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
+    <android:uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <android:uses-permission android:name="android.permission.READ_CALL_LOG" />
 
     <application
-        android:name="com.example.knowledge.programming.activities.ApplicationContext"
-
+        android:name=".ApplicationContext"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -26,8 +32,12 @@
         <activity android:name=".DisplayMessageActivity" />
         <activity android:name=".ServicesActivity" />
         <activity android:name=".RequestServicesActivity" />
-        <activity android:name=".OfferServicesActivity"></activity>
-    </application>
+        <activity android:name=".OfferServicesActivity" />
+        <activity android:name=".UserManagerActivity" />
 
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/title_activity_login"></activity>
+    </application>
 
 </manifest>
