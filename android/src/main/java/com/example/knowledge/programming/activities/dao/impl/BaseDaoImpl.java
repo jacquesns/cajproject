@@ -12,12 +12,10 @@ import java.util.Map.Entry;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.SQLException;
-import android.database.sqlite.SQLiteBindOrColumnIndexOutOfRangeException;
-import android.database.sqlite.SQLiteConstraintException;
+ import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteDatatypeMismatchException;
-import android.database.sqlite.SQLiteException;
-import android.database.sqlite.SQLiteMisuseException;
+ import android.database.sqlite.SQLiteException;
+
  import com.example.knowledge.programming.activities.dao.BaseDao;
  import com.example.knowledge.programming.activities.entities.BaseEntity;
 
@@ -27,7 +25,8 @@ public abstract class BaseDaoImpl<E extends BaseEntity> implements BaseDao<E>{
     protected abstract String setTableFields();
     public abstract String getTableName();
     public abstract String getColumnHack();
-    protected abstract ContentValues getContentValues(E entity);
+    protected abstract ContentValues transformEntityToContentValues(E entity);
+    protected abstract E transformCursorToEntity(Cursor cursor);
 
     private String getCreateScript(){
         StringBuffer query = new StringBuffer();
@@ -75,7 +74,7 @@ public abstract class BaseDaoImpl<E extends BaseEntity> implements BaseDao<E>{
         Long newId = 0L;
         SQLiteDatabase database = DataBaseManager.instance().openDatabaseToWrite();
         try {
-            newId = database.insert(getTableName(), getColumnHack(), getContentValues(entity));
+            newId = database.insert(getTableName(), getColumnHack(), transformEntityToContentValues(entity));
         }
         /**
         catch (SQLiteDatatypeMismatchException e){
@@ -120,7 +119,7 @@ public abstract class BaseDaoImpl<E extends BaseEntity> implements BaseDao<E>{
     public void update(E entity) throws SQLiteException{
         SQLiteDatabase database = DataBaseManager.instance().openDatabaseToWrite();
         if (entity.getId() != null && entity.getId() > 0){
-            database.update(getTableName(), getContentValues(entity), getColumnHack()+" = ?", new String[]{entity.getId().toString()});
+            database.update(getTableName(), transformEntityToContentValues(entity), getColumnHack()+" = ?", new String[]{entity.getId().toString()});
             DataBaseManager.instance().closeDatabase();
         }
         else throw new SQLiteException ("Não foi encontrado o identificador do registro a ser atualizado.");
@@ -204,8 +203,6 @@ public abstract class BaseDaoImpl<E extends BaseEntity> implements BaseDao<E>{
         return null;
     }
 
-    protected abstract E cursorToEntity(Cursor cursor);
-
     protected List<E> getList(String query, String[] params){
         List<E> list = new ArrayList<E>();
         SQLiteDatabase database = null;
@@ -250,7 +247,7 @@ public abstract class BaseDaoImpl<E extends BaseEntity> implements BaseDao<E>{
             if (cursor.moveToFirst()) {
                 do {
 
-                    E entity = cursorToEntity(cursor);
+                    E entity = transformCursorToEntity(cursor);
                     list.add(entity);
                 } while (cursor.moveToNext());
             }
@@ -284,6 +281,7 @@ public abstract class BaseDaoImpl<E extends BaseEntity> implements BaseDao<E>{
     }
 
     protected String booleanToCursor(boolean val){
+
         return val?"1":"0";
     }
 
@@ -311,7 +309,7 @@ public abstract class BaseDaoImpl<E extends BaseEntity> implements BaseDao<E>{
     private String getContentValuesLog(E e){
         StringBuffer log = new StringBuffer();
         if (e != null){
-            ContentValues contentValues = getContentValues(e);
+            ContentValues contentValues = transformEntityToContentValues(e);
             if (contentValues != null){
                 if (contentValues != null){
                     for (Entry<String,Object> content : contentValues.valueSet()){

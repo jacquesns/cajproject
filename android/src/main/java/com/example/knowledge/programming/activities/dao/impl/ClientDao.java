@@ -13,6 +13,7 @@ import com.example.knowledge.programming.activities.entities.Client;
 
 public class ClientDao extends BaseDaoImpl<Client> implements IClientDao {
 
+    private static IClientDao instance;
     static final String TABLE_NAME = "CLIENT";
 
     enum EField{
@@ -20,7 +21,7 @@ public class ClientDao extends BaseDaoImpl<Client> implements IClientDao {
         NAME ("name"),
         SURNAME ("surname"),
         BIRTHDAY ("birthtday"),
-        LOGIN ("nation"),
+        LOGIN ("login"),
         PASSWORD ("password"),
         ACTIVE ("true");
 
@@ -34,13 +35,82 @@ public class ClientDao extends BaseDaoImpl<Client> implements IClientDao {
         }
     }
 
-    private static IClientDao instance;
     public static IClientDao instance(){
         if (instance == null){
             instance = new ClientDao();
         }
         return instance;
     }
+
+
+
+    //-------- OBJECT MANIPULATION (Entity, ContentValues, Cursor)
+
+    /**
+     * Transform Entity to ContentValues
+     * Used when data goes from Service to database.
+     *
+     * @param entity
+     * @return
+     */
+    @Override
+    public ContentValues transformEntityToContentValues(Client entity) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(EField.ID.getName(), entity.getId());
+        contentValues.put(EField.NAME.getName(), entity.getName());
+        contentValues.put(EField.SURNAME.getName(), entity.getSurname());
+        //contentValues.put(EField.BIRTHDAY.getName(), entity.getBirthday());
+        contentValues.put(EField.LOGIN.getName(), entity.getLogin());
+        contentValues.put(EField.PASSWORD.getName(), entity.getPassword());
+        contentValues.put(EField.ACTIVE.getName(), entity.isActive());
+        return contentValues;
+    }
+
+    /**
+     * Transform Cursor to Entity
+     * Used when data comes from database and wants
+     * to set an entity.
+     *
+     * @param cursor
+     * @return
+     */
+    @Override
+    protected Client transformCursorToEntity(Cursor cursor) {
+        Long id = cursor.getLong(getColumnByName(EField.ID.name, cursor));
+        String name = cursor.getString(cursor.getColumnIndex(EField.NAME.name));
+        String surname = cursor.getString(cursor.getColumnIndex(EField.SURNAME.name));
+        String login = cursor.getString(cursor.getColumnIndex(EField.LOGIN.name));
+        String password = cursor.getString(cursor.getColumnIndex(EField.PASSWORD.name));
+        Boolean active = getBooleanValueFromCursor(cursor.getString(cursor.getColumnIndex(EField.ACTIVE.name)));
+        Date birthday = getDateValueFromCursor(cursor.getLong(cursor.getColumnIndex(EField.BIRTHDAY.name)));
+        return new Client(id, name, surname, birthday, login, password, active);
+    }
+
+
+    //----------Queries------/
+
+    public List<Client> selectRecents() {
+        StringBuffer query = new StringBuffer();
+        query.append(" SELECT * FROM ");
+        query.append(TABLE_NAME);
+        query.append(" WHERE ");
+        query.append(EField.BIRTHDAY.name).append(" is not null ");
+        query.append(" ORDER BY ").append(EField.NAME.name).append(" DESC ");
+        return getList(query.toString(), null);
+    }
+
+    public List<Client> selectActives() {
+        StringBuffer query = new StringBuffer();
+        query.append(" SELECT * FROM ");
+        query.append(TABLE_NAME);
+        query.append(" WHERE ");
+        query.append(EField.ACTIVE.name).append(" = ").append(booleanToCursor(true));
+        return getList(query.toString(), null);
+    }
+
+
+
+    //------ DATABASE TABLE DEFINITION -------
 
     @Override
     public String getTableName() {
@@ -52,18 +122,6 @@ public class ClientDao extends BaseDaoImpl<Client> implements IClientDao {
         return EField.ID.getName();
     }
 
-    @Override
-    public ContentValues getContentValues(Client entity) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(EField.ID.getName(), entity.getId());
-        contentValues.put(EField.NAME.getName(), entity.getName());
-        contentValues.put(EField.SURNAME.getName(), entity.getSurname());
-        //contentValues.put(EField.BIRTHDAY.getName(), entity.getBirthday());
-        contentValues.put(EField.LOGIN.getName(), entity.getLogin());
-        contentValues.put(EField.PASSWORD.getName(), entity.getPassword());
-        contentValues.put(EField.ACTIVE.getName(), entity.isActive());
-        return contentValues;
-    }
 
     @Override
     protected String setTableFields() {
@@ -90,36 +148,7 @@ public class ClientDao extends BaseDaoImpl<Client> implements IClientDao {
         return query.toString();
     }
 
-    @Override
-    protected Client cursorToEntity(Cursor cursor) {
-        Long id = cursor.getLong(getColumnByName(EField.ID.name, cursor));
-        String name = cursor.getString(cursor.getColumnIndex(EField.NAME.name));
-        String surname = cursor.getString(cursor.getColumnIndex(EField.SURNAME.name));
-        String login = cursor.getString(cursor.getColumnIndex(EField.LOGIN.name));
-        String password = cursor.getString(cursor.getColumnIndex(EField.PASSWORD.name));
-        Boolean active = getBooleanValueFromCursor(cursor.getString(cursor.getColumnIndex(EField.ACTIVE.name)));
-        Date birthday = getDateValueFromCursor(cursor.getLong(cursor.getColumnIndex(EField.BIRTHDAY.name)));
-        return new Client(id, name, surname, birthday, login, password, active);
-    }
 
-    public List<Client> selectRecents() {
-        StringBuffer query = new StringBuffer();
-        query.append(" SELECT * FROM ");
-        query.append(TABLE_NAME);
-        query.append(" WHERE ");
-        query.append(EField.BIRTHDAY.name).append(" is not null ");
-        query.append(" ORDER BY ").append(EField.NAME.name).append(" DESC ");
-        return getList(query.toString(), null);
-    }
-
-    public List<Client> selectActives() {
-        StringBuffer query = new StringBuffer();
-        query.append(" SELECT * FROM ");
-        query.append(TABLE_NAME);
-        query.append(" WHERE ");
-        query.append(EField.ACTIVE.name).append(" = ").append(booleanToCursor(true));
-        return getList(query.toString(), null);
-    }
 
 }
 

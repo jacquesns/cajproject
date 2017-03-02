@@ -20,7 +20,7 @@ public class RequestServicesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_request_services);
 
 
-        Button buttonRequestServices = (Button)findViewById(R.id.buttonSaveRequestServices);
+        Button buttonRequestServices = (Button)findViewById(R.id.buttonSearchRequestService);
         buttonRequestServices.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
